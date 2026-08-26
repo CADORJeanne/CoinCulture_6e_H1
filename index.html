@@ -136,7 +136,9 @@
   .fiche__titre{font-family:var(--display);font-weight:600;font-size:1.18rem;line-height:1.05;margin:0;color:var(--encre);}
   .fiche__auteur{font-size:.86rem;color:var(--encre-doux);margin:0;}
   .fiche__auteur b{font-weight:700;color:var(--encre);}
+  .fiche__infos{font-family:var(--machine);font-size:.72rem;letter-spacing:.02em;color:var(--kaki);margin:0;}
   .fiche__pitch{font-size:.88rem;margin:.1rem 0 0;color:var(--encre-doux);flex:1;}
+  .fiche__note{font-size:.78rem;font-style:italic;line-height:1.45;margin:.1rem 0 0;padding-left:.55rem;border-left:2px solid var(--accent);color:var(--encre-doux);}
   .fiche__pied{display:flex;align-items:center;gap:.45rem;margin-top:.5rem;padding-top:.55rem;border-top:1px dashed var(--sepia);font-size:.74rem;color:var(--encre-doux);}
   .fiche__pied .pastille{width:11px;height:11px;}
   .lieu{margin-left:auto;font-family:var(--machine);font-size:.72rem;letter-spacing:.05em;}
@@ -182,6 +184,7 @@
   <symbol id="ic-web" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="3"><circle cx="32" cy="32" r="22"/><path d="M10 32h44M32 10c8 8 8 36 0 44M32 10c-8 8-8 36 0 44"/></g></symbol>
   <symbol id="ic-presse" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M12 16h32v36H16a4 4 0 0 1-4-4z"/><path d="M44 24h8v24a4 4 0 0 1-4 4"/><path d="M18 24h12v10H18zM34 24h4M18 40h20M18 46h20"/></g></symbol>
   <symbol id="ic-musique" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M26 44V16l22-5v28"/><circle cx="20" cy="44" r="6" fill="currentColor" stroke="none"/><circle cx="42" cy="39" r="6" fill="currentColor" stroke="none"/></g></symbol>
+  <symbol id="ic-des" viewBox="0 0 64 64"><rect x="8" y="8" width="48" height="48" rx="9" fill="none" stroke="currentColor" stroke-width="3"/><g fill="currentColor"><circle cx="21" cy="21" r="4"/><circle cx="43" cy="21" r="4"/><circle cx="32" cy="32" r="4"/><circle cx="21" cy="43" r="4"/><circle cx="43" cy="43" r="4"/></g></symbol>
   <!-- sceau / emblème récurrent du Coin Culture -->
   <symbol id="ic-sceau" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 7l3.2 6.6 7.3 1-5.3 5.1 1.3 7.2L20 23.5l-6.5 3.4 1.3-7.2L9.5 14.6l7.3-1z" fill="currentColor"/></symbol>
 </defs></svg>
@@ -214,9 +217,11 @@
 
      ICÔNES disponibles (champ "icone") :
        livre · bd · manga · film · doc · podcast · carte · image
-       audio · video · jeu · web · presse · musique
+       audio · video · jeu · des · web · presse · musique
      NIVEAUX (champ "niveau") : "v" (vert) · "o" (orange) · "r" (rouge)
      Champs d'une œuvre : titre, auteur, annee, lieu, pitch, niveau, type (optionnel), icone (optionnel : sinon = icône de la catégorie)
+       infos (optionnel : petite ligne technique, ex. âge · joueurs · durée · prix)
+       note  (optionnel : remarque en italique sous le pitch, ex. mise en garde)
 ====================================================================== -->
 <script>
 const CONFIG = {
@@ -224,7 +229,7 @@ const CONFIG = {
   code:      "H1",
   niveau:    "6e",
   titre:     "La Préhistoire",
-  sousTitre: "romans · bd · mangas · films · animés · docs · podcasts",
+  sousTitre: "romans · bd · mangas · films · animés · docs · podcasts · jeux",
   intro:     "Une sélection d'œuvres pour explorer les temps préhistoriques autrement : des premiers hommes au feu, des grottes ornées aux mammouths. À piocher selon ton envie — pour lire, regarder ou écouter.",
   accent:    "#A85832"   /* ocre préhistorique */
 };
@@ -278,6 +283,21 @@ const CATEGORIES = [
       pitch:"Des récits d'aventures pour les 7-12 ans. Cherche les épisodes sur Lascaux et la préhistoire : passionnant et facile à suivre." },
     { titre:"Le Cours de l'histoire", couverture:"https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/1a/02/0c/1a020ca8-b6d2-39f5-01ba-a0efa9b9eaf7/mza_1050990122467541468.jpg/1200x1200bf-60.jpg", lien:"https://www.radiofrance.fr/franceculture/podcasts/serie-prehistoire-a-la-rencontre-des-premiers-humains", auteur:"France Culture", lieu:"Fr.", niveau:"o", type:"Podcast · radio", action:"Écouter",
       pitch:"Des émissions avec des historiens et archéologues. Tape « préhistoire » ou « Néandertal » pour trouver des séries entières." }
+  ]},
+
+  { code:"J", nom:"Jeux de société", unite:"à jouer", icone:"des", oeuvres:[
+    { titre:"L'Âge de Pierre", niveau:"v", type:"Jeu de société",
+      couverture:"https://www.ludifolie.com/11952-large_default/l-age-de-pierre-un-avenir-radieux.jpg",
+      infos:"10 ans et + · 2 à 4 joueurs · 60 min",
+      pitch:"On envoie les membres de sa tribu chasser, cueillir, extraire du bois et de la pierre, on fabrique des outils, on agrandit sa hutte — et il faut nourrir tout le monde à chaque tour." },
+    { titre:"Paleo", niveau:"o", type:"Jeu de société · coopératif",
+      couverture:"https://www.ludifolie.com/15463-large_default/paleo.jpg",
+      infos:"10 ans et + · 2 à 4 joueurs · 60 min",
+      pitch:"Aventure coopérative de survie : la tribu explore, chasse, fabrique ses premiers outils et affronte les dangers, en essayant de laisser une trace — une peinture rupestre. Des modules différents à chaque partie." },
+    { titre:"Aurignac", niveau:"r", type:"Jeu de société",
+      couverture:"https://okaluda.fr/wp-content/uploads/2023/04/okaluda-aurignac-boite-3d-1.webp",
+      infos:"12 ans et + · 1 à 5 joueurs · 1 à 2 h",
+      pitch:"Il y a 35 000 ans : un joueur dirige un clan de Néandertaliens, un autre des Homo sapiens, un troisième incarne Mère Nature qui leur met des bâtons dans les roues. Chaque rôle se joue différemment." }
   ]}
 ];
 /* ▲▲▲  FIN DE LA ZONE À MODIFIER  ▲▲▲ */
@@ -374,8 +394,10 @@ const CATEGORIES = [
         <div class="fiche__corps">
           ${o.type?`<span class="fiche__type">${esc(o.type)}</span>`:''}
           <h3 class="fiche__titre">${titreHtml}</h3>
-          <p class="fiche__auteur"><b>${esc(o.auteur)}</b>${annee}</p>
+          ${(o.auteur||o.annee)?`<p class="fiche__auteur"><b>${esc(o.auteur)}</b>${annee}</p>`:''}
+          ${o.infos?`<p class="fiche__infos">${esc(o.infos)}</p>`:''}
           <p class="fiche__pitch">${esc(o.pitch)}</p>
+          ${o.note?`<p class="fiche__note">${esc(o.note)}</p>`:''}
           <div class="fiche__pied">
             <span class="pastille ${niv[0]}"></span> ${niv[1]}
             ${o.lieu?`<span class="lieu">${esc(o.lieu)}</span>`:''}
