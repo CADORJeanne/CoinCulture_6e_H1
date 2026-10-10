@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Le Coin Culture — modèle 3e</title>
+<title>Le Coin Culture — La Préhistoire (6e)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
@@ -436,6 +436,31 @@ const CATEGORIES = [
     wrap.appendChild(ifr);
     b.replaceWith(wrap);
   });
+})();
+</script>
+<!-- ===== Compteur de visites (statistiques anonymes Google Sheets) ===== -->
+<script>
+(function () {
+  var URL_STATS = "https://script.google.com/macros/s/AKfycbyyIpY59EXu05C_mLzop50w94Vpw6fELQXTQHtWFP5DZQ3N7KXNg0njtVo8RPXj_DIG/exec";
+  var NOM_APPLI = "Coin culture 6e Préhistoire";
+  try {
+    if (location.protocol === "file:" || navigator.webdriver) return; // fichier hors ligne ou robot : rien à envoyer
+    var evts = ["pointerdown", "keydown", "touchstart"];
+    function envoyer() {
+      evts.forEach(function (ev) { removeEventListener(ev, envoyer, true); });
+      var cle = "visite-" + NOM_APPLI;
+      try { if (sessionStorage.getItem(cle)) return; sessionStorage.setItem(cle, "1"); } catch (e) {}
+      var tactile = window.matchMedia && matchMedia("(pointer: coarse)").matches;
+      var appareil = !tactile ? "ordinateur" : (Math.min(screen.width, screen.height) < 600 ? "téléphone" : "tablette");
+      fetch(URL_STATS, {
+        method: "POST", mode: "no-cors", keepalive: true,
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ type: "visite", app: NOM_APPLI, appareil: appareil })
+      }).catch(function () {});
+    }
+    // La visite n'est comptée qu'au premier vrai geste (clic, toucher ou touche du clavier)
+    evts.forEach(function (ev) { addEventListener(ev, envoyer, { capture: true, passive: true }); });
+  } catch (e) {}
 })();
 </script>
 </body>
